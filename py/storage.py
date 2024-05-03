@@ -17,7 +17,7 @@ class Storage:
         if sys.platform is 'win32':
             home = expanduser("~")+"\\.Neliapila\\pinned_thumbs"
         else:
-            home = expanduser("~")+"/.local/share/neliapila/pinned_thumbs"
+            home = expanduser("~")+"/.local/share/harbour-neliapila/harbour-neliapila/pinned_thumbs"
 
         if not exists(home):
             makedirs(home)
@@ -29,7 +29,7 @@ class Storage:
         if sys.platform is 'win32':
             home = expanduser("~")+"\\.Neliapila\\"
         else:
-            home = expanduser("~")+"/.local/share/neliapila/"
+            home = expanduser("~")+"/.local/share/harbour-neliapila/harbour-neliapila/"
 
 
         if not exists(home):
@@ -265,7 +265,7 @@ class Storage:
         if thumb_url is not None:
             file_name = re.findall(r'\d+s.jpg',thumb_url)[0]
             thumb_dir = self.get_thumb_dir()
-            save(thumb_dir, file_name, thumb_url)
+            save(thumb_dir, file_name, thumb_url, file_name)
         else:
             thumb_url="none"
 

@@ -175,8 +175,8 @@ AbstractPage {
                 captchaPage.busy = false
             });
 
-            setHandler('reply_set_response', function(result) {
-                pageStack.navigateBack();
+            setHandler('debug', function(result) {
+                console.log(result);
             });
 
             setHandler('post_set_response', function(result) {

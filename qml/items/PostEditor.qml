@@ -174,7 +174,8 @@ BackgroundItem {
     Component {
         id: filePickerPage
         FilePickerPage {
-            nameFilters: [ '*.jpg', '*.png', '*.webm','*.gif' ]
+            nameFilters: ['*.mp3']
+            // '*.jpg', '*.png', '*.webm','*.gif' ]
             onSelectedContentPropertiesChanged: {
                 newPostItem.selectedFile = selectedContentProperties.filePath
                 selectedImageThumb.source = "image://nemoThumbnail/" + selectedContentProperties.filePath

@@ -17,7 +17,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../items"
-import io.thp.pyotherside 1.4
+import io.thp.pyotherside 1.5
 import "../js/utils.js" as Utils
 import "../js/settingsStorage.js" as SettingsStore
 

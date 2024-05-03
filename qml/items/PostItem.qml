@@ -1,26 +1,30 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../js/utils.js" as Utils
+import "../js/settingsStorage.js" as SettingsStore
+
+
 
 GridItem {
     id: delegate
-    width: !isPortrait && mode !== 'post' ? parent.width /2 : parent.width
-    contentHeight: mode === 'post' && menuOpen  ? contextMenu.height + post.height : mode ==='post' ? post.height : isPortrait ? parent.width/2: parent.width/4
+    width: !isPortrait && mode !== 'post' ? parent.width /2 : parent.width;
+    contentHeight: mode === 'post' && menuOpen  ? contextMenu.height + post.height : mode ==='post' ? post.height : isPortrait ? parent.width/2: parent.width/4;
 
     property Item contextMenu
-    property bool menuOpen: contextMenu != null && contextMenu.parent === delegate
+    property bool menuOpen: contextMenu != null && contextMenu.parent === delegate;
 
-    property int ratio: Math.round(parent.width/3)
-    property int infoAreaHeight: Math.round(Theme.paddingLarge*2)
-    property int contentAreaHeight: isPortrait ? ratio :Math.round(parent.width/5)
+    property int ratio: Math.round(parent.width/3);
+    property int infoAreaHeight: Math.round(Theme.paddingLarge*2);
+    property int contentAreaHeight: isPortrait ? ratio :Math.round(parent.width/5);
 
     Item {
-        anchors.fill: parent
+        anchors.fill: parent;
+        
 
         Rectangle {
-            anchors.bottom: parent.bottom
-            width: parent.width
-            height: post.height + infoAreaHeight
+            anchors.bottom: parent.bottom;
+            width: parent.width;
+            height: post.height + infoAreaHeight;
 
             gradient: Gradient {
                 GradientStop { position: 0.0; color: Theme.rgba(Theme.primaryColor, 0) }
@@ -28,26 +32,37 @@ GridItem {
             }
         }
     }
+    Item {
+        anchors.fill: parent;
+
+        Rectangle {
+            visible: highlight_post
+            width: parent.width
+            height: post.height
+
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: Theme.rgba(Theme.primaryColor, 0.2) }
+                GradientStop { position: 1.0; color: Theme.rgba(Theme.primaryColor, 0.4) }
+            }
+        }
+    }
 
     Column {
         id: post
         anchors {
-            left:parent.left
-            right:parent.right
-            leftMargin: pageMargin
-            rightMargin: pageMargin
+            left:parent.left;
+            right:parent.right;
+            leftMargin: pageMargin;
+            rightMargin: pageMargin;
         }
-
-        //spacing: padding
 
         Item {
             width: !isPortrait && mode !== 'post' ? parent.width / 2 : parent.width;
             height: !isPortrait && mode !== 'post' ? infoAreaHeight  : infoAreaHeight;
 
             Row {
-                id: headerContentRow
-                anchors.fill: parent
-                //spacing: padding
+                id: headerContentRow;
+                anchors.fill: parent;
 
                 Item {
                     id: timeArea
@@ -78,7 +93,7 @@ GridItem {
                         source: "image://theme/icon-s-high-importance"
                         height:postNoText.contentHeight
                         width: !isPortrait && mode !== 'post' ? height /2: height
-                      fillMode: Image.PreserveAspectFit
+                        fillMode: Image.PreserveAspectFit
                         visible: sticky ? true : false
                         cache: true
                         anchors {
@@ -132,7 +147,7 @@ GridItem {
                     break;
                 default:
                     !isPortrait && mode !== 'post' ? postText.height - padding*1.5: contentAreaHeight
-                                   }
+                }
             }
 
             Row {
@@ -149,9 +164,10 @@ GridItem {
                         id: thumbImg
                         fillMode: Image.PreserveAspectCrop
                         asynchronous : true
-                        source: !has_file ? "" : thumbUrl
+                        cache: true
+                        source: !has_file ? "" : SettingsStore.getSetting("SpoilerImages") == 1 && spoiler ? "https://s.4cdn.org/image/spoiler.png" : thumbUrl;
 
-                        anchors.fill: parent
+                        anchors.fill: parent;
                     }
 
                     Loader {
@@ -239,7 +255,8 @@ GridItem {
                                 pageStack.push(Qt.resolvedUrl("../pages/VideoViewPage.qml"),
                                                {
                                                    "imgUrl": imgUrl,
-                                                   "filename": filename
+                                                   "filename": filename,
+                                                   "filename_original": filename_original
                                                });
                                 break;
                             case ".gif":
@@ -247,7 +264,8 @@ GridItem {
                                                {
                                                    "imgUrl": imgUrl,
                                                    "thumbUrl": thumbUrl,
-                                                   "filename": filename
+                                                   "filename": filename,
+                                                   "filename_original": filename_original
                                                });
                                 break;
 
@@ -256,58 +274,63 @@ GridItem {
                                                {
                                                    "imgUrl": imgUrl,
                                                    "thumbUrl": thumbUrl,
-                                                   "filename": filename
+                                                   "filename": filename,
+                                                   "filename_original": filename_original
                                                });
                             }
                         }
                     }
                 }
-                Item {
-                    id: commentArea
-                    width: has_file ? parent.width-thumbNailArea.width : parent.width;
-                    height:isPortrait ? (mode === 'post' ? post.height + infoAreaHeight : contentAreaHeight) :ratio/2
+            }
+            Item {
+                id: commentArea
+                anchors.fill: parent
+                width: has_file ? parent.width-thumbNailArea.width : parent.width;
+                height:isPortrait ? (mode === 'post' ? post.height + infoAreaHeight : contentAreaHeight) :ratio/2
 
-                    Text {
-                        id: postText
-                        anchors {
-                            fill: parent
-                        }
+                Text {
+                    id: postText
+                    anchors {
+                        fill: parent
+                    }
 
-                        text: com
-                        wrapMode: Text.Wrap
-                        font.pixelSize: postFontSize
-                        color: Theme.primaryColor
-                        clip: mode === "post" ? false : true
-                        linkColor : Theme.highlightColor
-                        verticalAlignment: Text.AlignTop
+                    text: Utils.makeurls(com)
+                    textFormat: Text.StyledText
+                    wrapMode: Text.Wrap
+                    font.pixelSize: postFontSize
+                    color: Theme.primaryColor
+                    clip: mode === "post" ? false : true
+                    linkColor : Theme.highlightColor
+                    verticalAlignment: Text.AlignTop
 
-                        onLinkActivated: {
-                            Utils.openLink(link)
-                        }
-                        onLineLaidOut: {
-                            if (line.y > thumbNailArea.height && has_file && mode === 'post') {
-                                line.x = line.x - (thumbNailArea.width + 5)
-                                line.width = line.width + (thumbNailArea.width + 5)
-                            }
-                        }
-                        Image {
-                            id: dots
-                            height: 32
-                            width: 32
-                            anchors {
-                                bottom: parent.bottom
-                                right: parent.right
-                            }
-                            source: "image://theme/icon-lock-more"
-                            visible: false
-                        }
-                        Component.onCompleted: {
-                            if (mode !== "post" && contentAreaHeight < postText.contentHeight) {
-                                postText.maximumLineCount = Math.floor(contentAreaHeight/postFontSize-1)
-                                dots.visible = true
-                            }
+
+                    onLineLaidOut: {
+                        if (line.y < thumbNailArea.height && has_file && mode === 'post') {
+                            line.x = line.x + (thumbNailArea.width + 5)
+                            line.width = line.width - (thumbNailArea.width + 5)
                         }
                     }
+                    onLinkActivated: {
+                        Utils.openLink(link)
+                    }
+                    Image {
+                        id: dots
+                        height: 32
+                        width: 32
+                        anchors {
+                            bottom: parent.bottom
+                            right: parent.right
+                        }
+                        source: "image://theme/icon-lock-more"
+                        visible: false
+                    }
+                    Component.onCompleted: {
+                        if (mode !== "post" && contentAreaHeight < postText.contentHeight) {
+                            postText.maximumLineCount = Math.floor(contentAreaHeight/postFontSize-1)
+                            dots.visible = true
+                        }
+                    }
+                    //     }
                 }
             }
         }
@@ -356,9 +379,9 @@ GridItem {
                         width:parent.height/2
                         cache: true
                         fillMode: Image.PreserveAspectFit
-                        visible: countrycode !== "" || board_flag !== ""
-                        source: countrycode !== "" ? "https://s.4cdn.org/image/country/" + countrycode.toLowerCase() + ".gif" : board_flag !== "" ? "https://s.4cdn.org/image/flags/" +  boardId + "/" + board_flag.toLowerCase() + ".gif" : ""
-                     }
+                        visible: has_flag || has_memeflag
+                        source: has_flag ? "https://s.4cdn.org/image/country/" + countrycode.toLowerCase() + ".gif" : has_memeflag ? "https://s.4cdn.org/image/flags/" +  boardId + "/" + board_flag.toLowerCase() + ".gif" : ""
+                    }
                     
                     Image {
                         id: pinIndicator
@@ -433,7 +456,7 @@ GridItem {
                 pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, boardId: post_board, pinned: true } )
             }
             else {
-                pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, boardId: post_board, pinned: false} )
+                pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, threadId: threadId, boardId: post_board, pinned: false} )
             }
             break;
 
@@ -456,7 +479,8 @@ GridItem {
                                        postNo: thisPostNo,
                                        boardId: boardId,
                                        modelToStrip : modelToStrip,
-                                       postsToShow : postsToShow
+                                       postsToShow : postsToShow,
+                                       threadId: threadId
                                    } )
                 }
                 else {
@@ -464,7 +488,8 @@ GridItem {
                                        postNo: thisPostNo,
                                        boardId: boardId,
                                        modelToStrip : postsModel,
-                                       postsToShow : postsToShow
+                                       postsToShow : postsToShow,
+                                       threadId: threadId
                                    } )
                 }
             }
@@ -487,13 +512,12 @@ GridItem {
             if (pP)
                 var modelToStrip = pP.returnModel()
 
-            contextMenu = contextMenuComponent.createObject(listView, {postReplies: postReplies, thisPostNo: no, modelToStrip : modelToStrip,com: com})
+            contextMenu = contextMenuComponent.createObject(listView, {postReplies: postReplies, thisPostNo: no, modelToStrip : modelToStrip,com: com, poster_id: poster_id})
             contextMenu.open(delegate)
             break;
 
         default:
             contextMenu = contextMenuComponent.createObject(listView, {index:index,pin:pin})
-          //  contextMenu.open(delegate)
         }
     }
 }

@@ -35,7 +35,7 @@ Page {
             Label {
                 id: appName
                 anchors.top: appIcon.bottom
-                text: "Neliapila 0.7"
+                text: "Neliapila 0.9.1"
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSizeLarge
@@ -53,7 +53,7 @@ Page {
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.primaryColor
                 wrapMode: Text.Wrap
-                text: "4chan image board browser for Sailfish OS\n" +
+                text: "4chan image board browser for Sailfish OS\nOriginally developed by tabasku\n" +
                       "Licensed under GNU GPLv3+\n";
             }
 
@@ -80,7 +80,7 @@ Page {
                     margins: Theme.paddingLarge
                 }
                 text: "Github"
-                onClicked: Qt.openUrlExternally("https://github.com/tabasku/harbour-neliapila");
+                onClicked: Qt.openUrlExternally("https://github.com/szopin/harbour-neliapila");
             }
 
             Button {
@@ -122,7 +122,7 @@ Page {
                 font.pixelSize: Theme.fontSizeExtraSmall
                 color: Theme.primaryColor
                 wrapMode: Text.Wrap
-                text: "Contributors:\n★ szopin https://github.com/szopin\n★ JacquesCedric https://github.com/jacquesCedric";
+                text: "OG Author:\n★ tabasku https://github.com/tabasku\n\nContributors:\n★ szopin https://github.com/szopin\n★ JacquesCedric https://github.com/jacquesCedric";
             }
         }
     }

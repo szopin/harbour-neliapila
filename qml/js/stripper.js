@@ -24,7 +24,7 @@ WorkerScript.onMessage = function(msg) {
     }
     msg.model.sync();
 
-    //console.log("STRIPPED "+postNo+ " "+ modelToStrip)
+    console.log("STRIPPED "+postNo+ " "+ modelToStrip)
 
     WorkerScript.sendMessage({'busy':false})
 }

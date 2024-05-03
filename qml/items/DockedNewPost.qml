@@ -20,7 +20,7 @@ DockedPanel {
     property bool busy: false
 
     width: parent.width
-    height: commentRow.height + postActionButtons.height + optionalFields.height + pageMargin*2
+    height: commentRow.height + postActionButtons.height + optionalFields.height + pageMargin
 
     Item {
         anchors.fill: parent
@@ -39,8 +39,6 @@ DockedPanel {
     Item {
         anchors {
             fill: parent
-            topMargin: pageMargin
-            bottomMargin: Theme.paddingSmall
             leftMargin: pageMargin
             rightMargin: pageMargin
         }
@@ -59,18 +57,18 @@ DockedPanel {
             width: parent.width
             height: commentText.text
                     ? commentText.height
-                    : commentText.height + screen.height * 0.3
-            spacing: Theme.paddingSmall
+                    : commentText.height + screen.height * 0.4
+            spacing: 0
             opacity: newPostItem.busy
-                    ? 0.5
-                    : 1
+                     ? 0.5
+                     : 1
 
             Row {
                 id: commentRow
                 spacing: 0
 
                 Rectangle {
-                    width: column.width/4
+                    width: commentText.focus ? column.width/8 : column.width/4
                     height: width
 
                     gradient: Gradient {
@@ -101,14 +99,14 @@ DockedPanel {
                     height: commentText.contentHeight < column.width/3
                             ? column.width/3
                             : commentText.contentHeight
-                    width: column.width/4*3
+                    width: commentText.focus ? column.width/8*7 :  column.width/4*3
                     spacing: 0
 
                     TextArea {
                         id: commentText
                         enabled: !busy
                         width: parent.width
-                        height: 400
+                        height: orientation == Orientation.Portrait ? screen.height/2 : focus ? screen.width/3 : screen.width/2// !text ? 400 : screen.height/2
                         font.family: Theme.fontFamily
                         font.pixelSize: Theme.fontSizeSmall
                         clip: false
@@ -142,7 +140,7 @@ DockedPanel {
                         color: Theme.primaryColor
                         clip: true
 
-                        focus: false //optionalFieldsVisible
+                        focus: false
                         label: 'Subject'
                         placeholderText: 'Subject'
                         text: subject
@@ -152,7 +150,6 @@ DockedPanel {
                         TextField {
                             id: nameText
                             enabled: !busy
-                            //width: column.width/3*2
                             width: column.width
                             visible: optionalFieldsVisible
                             font.family: Theme.fontFamily
@@ -172,12 +169,12 @@ DockedPanel {
                 id: postActionButtons
                 color: "transparent"
                 width: column.width
-                height: Theme.iconSizeMedium
+                height: orientation == Orientation.Portrait ? Theme.iconSizeMedium : Theme.iconSizeMedium/3
 
                 IconButton {
                     id: closePostButton
                     width: Theme.iconSizeMedium
-                    height: width
+                    height: postActionButtons.height
                     enabled: !busy
 
                     anchors {
@@ -198,7 +195,7 @@ DockedPanel {
                 IconButton {
                     id: postButton
                     width: Theme.iconSizeMedium
-                    height: width
+                    height: postActionButtons.height
 
                     enabled: !newPostItem.busy
 
@@ -219,26 +216,20 @@ DockedPanel {
                                 infoBanner.alert("Image required in new post");
                                 return;
                             }
-                            else if (!newPostItem.comment) {
-                                infoBanner.alert("Comment required in new post");
-                                return;
-                            }
+
                         }
                         else {
                             console.log("new post")
 
-                            if (!newPostItem.comment) {
-                                infoBanner.alert("Comment required in reply");
-                                return;
-                            }
+
                         }
 
                         newPostItem.replyTo
-                            ? pageStack.push("../pages/Captcha2Page.qml",
-                              {
-                                  "replyTo" : newPostItem.replyTo
-                              })
-                            : pageStack.push("../pages/Captcha2Page.qml");
+                                ? pageStack.push("../pages/Captcha2Page.qml",
+                                                 {
+                                                     "replyTo" : threadId, "boardId": postsPage.boardId, "comment": comment, "nickname": nickname, "subject": subject, "selectedFile": selectedFile
+                                                 })
+                                : pageStack.push("../pages/Captcha2Page.qml", {"boardId": threadPage.boardId, "comment": comment, "nickname": nickname, "subject": subject, "selectedFile": selectedFile});
                     }
                 }
 
@@ -246,7 +237,7 @@ DockedPanel {
                     id: expandOptionalButton
                     enabled: !busy
                     width: Theme.iconSizeMedium
-                    height: width
+                    height: postActionButtons.height
 
                     anchors {
                         bottom: parent.bottom

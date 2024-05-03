@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-
+import threading
 import urllib.request
+import pyotherside
 
 def getdirs (dir):
     dirs = []
@@ -12,10 +13,15 @@ def getdirs (dir):
         dirs.insert(0, "..")
     return dirs
 
-def save (dir, name, url):
-    with urllib.request.urlopen(url) as res:
+def save (dir, name, url, filenam):
+    with urllib.request.urlopen(url) as res:                    
         if res.getcode() == 200:
             f = open(os.path.abspath(dir) + "/" + name, 'wb')
             f.write(res.read())
             f.close()
+            pyotherside.send(filenam, 'done')
+
+def savefile (dir, name, url, filenam):
+    t = threading.Thread(target=save, args=(dir, name, url, filenam))
+    t.start()
 

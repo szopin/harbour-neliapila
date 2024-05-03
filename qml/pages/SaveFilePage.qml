@@ -12,7 +12,7 @@ Dialog {
         // Why doesn't this work properly?
         // Instead of showing the remorse, it merely executes the function
         remorse.execute("Saving Image", function() {
-            py.call('savefile.save', [dir, uri.match(/\d+\.[a-z]+/)[0], uri] )
+            py.call('savefile.save', [dir, uri.match(/\d+\.[a-z]+/)[0], uri, dir] )
             infoBanner.alert("Image saved")
         })
     }
@@ -82,6 +82,7 @@ Dialog {
             var pythonpath = Qt.resolvedUrl('../../py/').substr('file://'.length);
 
             addImportPath(pythonpath);
+            console.log(Qt.resolvedUrl('../../py/'));
             console.log(pythonpath);
             importModule('savefile', function() {});
         }

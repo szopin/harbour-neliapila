@@ -8,21 +8,19 @@ Name:       harbour-neliapila
 # >> macros
 # << macros
 
-%{!?qtc_qmake:%define qtc_qmake %qmake}
-%{!?qtc_qmake5:%define qtc_qmake5 %qmake5}
-%{!?qtc_make:%define qtc_make make}
-%{?qtc_builddir:%define _builddir %qtc_builddir}
 Summary:    Neliapila 4chan.org browser
-Version:    0.7
+Version:    0.9.1
 Release:    1
 Group:      Qt/Qt
 License:    GPLv3+
+BuildArch:  noarch
 URL:        https://github.com/tabasku/harbour-neliapila
 Source0:    %{name}-%{version}.tar.bz2
 Source100:  harbour-neliapila.yaml
 Requires:   sailfishsilica-qt5
 Requires:   libsailfishapp-launcher
 Requires:   pyotherside-qml-plugin-python3-qt5
+Requires:   python3-requests
 BuildRequires:  pkgconfig(sailfishapp) >= 1.0.2
 BuildRequires:  pkgconfig(Qt5Core)
 BuildRequires:  pkgconfig(Qt5Qml)
@@ -32,42 +30,27 @@ BuildRequires:  desktop-file-utils
 %description
 Neliapila is a app made with QML/Python3 for SailfishOS for browsing the imageboard 4chan.org
 
+%define _binary_payload w2.xzdio
 
 %prep
 %setup -q -n %{name}-%{version}
 
-# >> setup
-# << setup
-
 %build
-# >> build pre
-# << build pre
 
-%qtc_qmake5 
+%qmake5
 
-%qtc_make %{?_smp_mflags}
+%make_build
 
-# >> build post
-# << build post
 
 %install
-rm -rf %{buildroot}
-# >> install pre
-# << install pre
 %qmake5_install
 
-# >> install post
-# << install post
 
-desktop-file-install --delete-original       \
-  --dir %{buildroot}%{_datadir}/applications             \
-   %{buildroot}%{_datadir}/applications/*.desktop
+desktop-file-install --delete-original         --dir %{buildroot}%{_datadir}/applications                %{buildroot}%{_datadir}/applications/*.desktop
 
 %files
 %defattr(-,root,root,-)
-%{_bindir}
+%defattr(0644,root,root,-)
 %{_datadir}/%{name}
 %{_datadir}/applications/%{name}.desktop
-%{_datadir}/icons/hicolor/86x86/apps/%{name}.png
-# >> files
-# << files
+%{_datadir}/icons/hicolor/*/apps/%{name}.png

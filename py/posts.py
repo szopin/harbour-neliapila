@@ -41,6 +41,7 @@ def get_posts(board_id,postno):
 
             post_values['no'] = post.post_id
 
+
             if post.post_id == postno :
                 post_values['replies'] = len(thread.posts)-1
                 post_values['sticky'] = int(thread.sticky)
@@ -50,20 +51,34 @@ def get_posts(board_id,postno):
 
             post_values['closed'] = int(thread.closed)
             post_values['poster_id'] = post.poster_id
+            post_values['highlight_post'] = 0            
+            post_values['pdepth'] = 0
             post_values['country_name'] = post.country_name
             post_values['countrycode'] = post.countrycode
             post_values['board_flag'] = post.board_flag
+            
+            if post.has_flag:
+                post_values['country_name'] = post.country_name
+                post_values['countrycode'] = post.countrycode
+                
+            if post.has_memeflag:    
+                post_values['board_flag'] = post.board_flag
+
             post_values['name'] = post.name
             post_values['time'] = post.timestamp
+            post_values['spoiler'] = post.spoiler
             post_values['semantic_url'] = post.semantic_url
             post_values['images'] = int(post.has_file)
             post_values['has_file'] = int(post.has_file)
-
+            post_values['has_memeflag'] = int(post.has_memeflag)
+            post_values['has_flag'] = int(post.has_flag)
+            
             if post.has_file:
                 post_values['ext'] = post.file_extension
                 post_values['thumbUrl'] = post.thumbnail_url
                 post_values['imgUrl'] = post.file_url
                 post_values['filename'] = post.filename
+                post_values['filename_original'] = post.filename_original
                 post_values['file_deleted'] = int(post.file_deleted)
 
             if post.comment:
@@ -75,7 +90,7 @@ def get_posts(board_id,postno):
                         post_replies[reply].append(post.post_id)
 
             if post.subject and post.comment:
-                post_values['com'] = '<b>{}</b><br>'.format(post.subject) + post.comment
+                post_values['com'] = '<b>{} </b> <br>'.format(post.subject) + post.comment
             elif not post.subject and post.comment:
                 post_values['com'] = post.comment
             elif post.subject and not post.comment:

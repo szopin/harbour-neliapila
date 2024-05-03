@@ -9,6 +9,8 @@ class Thread(object):
     Attributes:
         closed (bool): Whether the thread has been closed.
         sticky (bool): Whether this thread is a 'sticky'.
+        spoiler (bool): Image is spoilered.
+        filename_original (string): OP's original filename.
         archived (bool): Whether the thread has been archived.
         bumplimit (bool): Whether the thread has hit the bump limit.
         imagelimit (bool): Whether the thread has hit the image limit.
@@ -47,6 +49,13 @@ class Thread(object):
     @property
     def sticky(self):
         return self.topic._data.get('sticky') == 1
+    
+    @property
+    def spoiler(self):
+        return self.topic._data.get('spoiler') == 1
+    
+    def filename_original(self):
+        return self.topic._data.get('filename')    
 
     @property
     def archived(self):

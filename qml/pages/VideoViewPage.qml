@@ -32,8 +32,9 @@ Page {
     property string title
     property string ext
     property string filename
-    title : filename
-
+    property string filename_original
+    title : filename_original
+    allowedOrientations: Orientation.All
     property bool error: false
 
     SilicaFlickable {
@@ -96,7 +97,7 @@ Page {
                     playPauseButton.opacity = 1
                 }
                 onError: {
-                    infoBanner.warning(errorString);
+                    //infoBanner.warning(errorString);
                     console.log(errorString);
                 }
 

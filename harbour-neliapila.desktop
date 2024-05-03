@@ -2,7 +2,7 @@
 Type=Application
 X-Nemo-Application-Type=silica-qt5
 Icon=harbour-neliapila
-Exec=harbour-neliapila
+Exec=sailfish-qml harbour-neliapila
 Name=Neliapila
 # translation example:
 # your app name in German locale (de)
@@ -11,3 +11,7 @@ Name=Neliapila
 # a different app name in German locale (de).
 #Name[de]=Neliapila
 
+[X-Sailjail]
+Permissions=Internet;WebView;UserDirs;MediaIndexing;RemovableMedia;Audio
+OrganizationName=harbour-neliapila
+ApplicationName=harbour-neliapila

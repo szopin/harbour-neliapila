@@ -22,11 +22,12 @@ from bs4 import BeautifulSoup
 
 sitekey = "6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc"
 
-captcha2_url = "https://www.google.com/recaptcha/api/fallback?k=" + sitekey
+captcha2_url = "https://sys.4chan.org/captcha?framed=0&board=pol" #https://www.google.com/recaptcha/api/fallback?k=" + sitekey
 captcha2_payload_url = "https://www.google.com/recaptcha/api2/payload"
 captcha2_image_base_url = ""
 site_ref = "https://boards.4chan.org/"
-user_agent = 'Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0'
+user_agent = 'Mozilla/5.0 (Linux; Plasma Mobile, like Android 9.0) AppleWebKit/537.36 (KHTML, like Gecko) QtWebEngine/5.15.13 Chrome/87.0.4280.144 Mobile Safari/537.36' #Mozilla/5.0 (X11; Linux x86_64; rv:58.0) Gecko/20100101 Firefox/58.0'
+cf_clearance = 'CmMmiEIKJttrEdod9dg7.HknmtMIcRphzYf8ZCwWeXU-1685688438-0-150'
 
 captcha2_challenge_text = None # "Select all images with ducks."
 captcha2_challenge_id = None
@@ -65,9 +66,9 @@ def get_challenge_image(captcha2_challenge_id):
 
 def get_challenge():
     try:
-        headers = {'Referer': site_ref, 'User-Agent': user_agent}
+        headers = {'Referer': site_ref, 'User-Agent': user_agent, 'cf_clearance': cf_clearance}
         r = requests.get(captcha2_url, headers=headers)
-        
+        print(r.text)
         r.raise_for_status()
 
         html_content = r.content
@@ -115,7 +116,7 @@ def get_response(id,value,reply):
         data={'c':captcha2_challenge_id, 'response':captcha2_solution}
         r = requests.post(captcha2_url, headers=headers, data=data)
         html_post = r.content
-        #pyotherside.send('debug', [html_post])
+        pyotherside.send('debug', [html_post])
         soup = BeautifulSoup(html_post, 'html.parser')
 
         captcha2_response_soup = soup.find("div", {'class': 'fbc-verification-token'})

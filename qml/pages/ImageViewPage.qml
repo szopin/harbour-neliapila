@@ -16,32 +16,34 @@
 
 import QtQuick 2.1
 import Sailfish.Silica 1.0
+import io.thp.pyotherside 1.5
 import "../items"
 
 AbstractPage {
     id: imagePage
     allowedOrientations : Orientation.All
-    property alias imgUrl: imageItem.source
+    property string imgUrl //: imageItem.source
     property string thumbUrl
     property string ext
     property string filename
+    property string filename_original
 
-    busy : false
+    busy : true
 
     Loader {
         id: busyIndicatorLoader
         anchors.top: parent.top
 
-        sourceComponent: {
+    /*    sourceComponent: {
             switch (imageItem.status) {
             case Image.Ready : {
-                imagePage.busy=false
-                thumbnail_stretched.visible = false
+       //         imagePage.busy=false
+              //  thumbnail_stretched.visible = false
                 return undefined
             }
 
             case Image.Loading: {
-                imagePage.busy=true
+        //        imagePage.busy=true
                 return busyIndicatorComponent
             }
             case Image.Error:{
@@ -50,7 +52,7 @@ AbstractPage {
             }
             default: return undefined
             }
-        }
+        }*/
 
         Component {
             id: busyIndicatorComponent
@@ -64,6 +66,7 @@ AbstractPage {
                 BusyIndicator {
                     id: imageLoaderIndicator
                     size: BusyIndicatorSize.Small
+                    visible: imagePage.busy
                     running: true
                     anchors {
                         verticalCenter: parent.verticalCenter
@@ -94,7 +97,7 @@ AbstractPage {
         }
     }
 
-    title : filename
+    title : filename_original
 
     SilicaFlickable {
         id: picFlick
@@ -212,7 +215,10 @@ AbstractPage {
                 sourceSize.height: 4096
                 fillMode: Image.PreserveAspectFit
                 smooth: false
+                cache: false
                 anchors.fill: parent
+                opacity: busy ? 0 : 1
+                source: thumbUrl
             }
 
             Image {
@@ -222,8 +228,52 @@ AbstractPage {
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
                 asynchronous : true
-                opacity: busy ? 0.5 : 1
+                opacity: busy ? 0.5 : 0
             }
         }
+        Component.onCompleted: {
+
+                var uri = imgUrl
+            py.call('savefile.savefile', ['/tmp', 'tempfile', uri, filename] )
+
+        }
+    }
+
+
+    Python {
+        id: py
+
+        Component.onCompleted: {
+            // Add the Python library directory to the import path
+            var pythonpath = Qt.resolvedUrl('../../py/').substr('file://'.length);
+
+            addImportPath(pythonpath);
+            console.log(Qt.resolvedUrl('../../py/'));
+            console.log(pythonpath);
+            importModule('savefile', function() {});
+            
+        
+        setHandler(filename, function(result) {
+            thumbnail_stretched.visible = false
+            imagePage.busy=false
+            imageItem.source = '/tmp/tempfile' 
+            });
+    /*    onError: {
+            // when an exception is raised, this error handler will be called
+            console.log('python error: ' + traceback);
+        }
+        onReceived: {
+            
+            // asychronous messages from Python arrive here
+            // in Python, this can be accomplished via pyotherside.send()
+            console.log('got message from python: ' + data);
+            }*/
+        }
+    }
+
+    function cd(dir) {
+        py.call('savefile.getdirs', [dir], function(response) {
+            page.dirs = response
+        });
     }
 }

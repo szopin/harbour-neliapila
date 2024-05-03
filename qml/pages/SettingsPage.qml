@@ -142,6 +142,16 @@ Page {
                                 SettingsStore.setSetting("VideosAutomaticallyMuted", checked ? 1 : 0)
                             }
                         }
+                        
+                        TextSwitch {
+                            text: "Show spoiler images"
+                            description: "Toggle showing spoiler images or not"
+                            checked: SettingsStore.getSetting("SpoilerImages") == 1 ? true : false
+
+                            onCheckedChanged: {
+                                SettingsStore.setSetting("SpoilerImages", checked ? 1 : 0)
+                            }
+                        }                        
                     }
                 } // End of Media Settings section
 
@@ -169,7 +179,7 @@ Page {
                             Label {
                                 anchors.top: aboutListItemPrimaryLabel.bottom
 
-                                text: "Version 0.7"
+                                text: "Version 0.9.1"
                                 font.pixelSize: Theme.fontSizeExtraSmall
                             }
 

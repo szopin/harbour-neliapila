@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import Sailfish.Silica 1.0
 import "../js/utils.js" as Utils
+import "../js/settingsStorage.js" as SettingsStore
 
 GridItem {
     id: delegate
@@ -149,7 +150,8 @@ GridItem {
                         id: thumbImg
                         fillMode: Image.PreserveAspectCrop
                         asynchronous : true
-                        source: !has_file ? "" : thumbUrl
+                        cache: true
+                        source: !has_file ? "" : mode !== 'pinned' && SettingsStore.getSetting("SpoilerImages") == 1 && spoiler ? 'https://s.4cdn.org/image/spoiler.png' : thumbUrl
 
                         anchors.fill: parent
                     }
@@ -239,7 +241,8 @@ GridItem {
                                 pageStack.push(Qt.resolvedUrl("../pages/VideoViewPage.qml"),
                                                {
                                                    "imgUrl": imgUrl,
-                                                   "filename": filename
+                                                   "filename": filename,
+                                                   "filename_original": filename
                                                });
                                 break;
                             case ".gif":
@@ -247,7 +250,8 @@ GridItem {
                                                {
                                                    "imgUrl": imgUrl,
                                                    "thumbUrl": thumbUrl,
-                                                   "filename": filename
+                                                   "filename": filename,
+                                                   "filename_original": filename
                                                });
                                 break;
 
@@ -256,7 +260,8 @@ GridItem {
                                                {
                                                    "imgUrl": imgUrl,
                                                    "thumbUrl": thumbUrl,
-                                                   "filename": filename
+                                                   "filename": filename,
+                                                   "filename_original": filename
                                                });
                             }
                         }
@@ -275,6 +280,7 @@ GridItem {
 
                         text: com
                         wrapMode: Text.Wrap
+                        textFormat: Text.StyledText
                         font.pixelSize: postFontSize
                         color: Theme.primaryColor
                         clip: mode === "post" ? false : true
@@ -406,14 +412,15 @@ GridItem {
     onClicked: {
         switch(mode){
         case "pinned":
-            pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, boardId: post_board, pinned: true, repscount: postCount } )
+            pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, threadId: no, boardId: post_board, pinned: true, repscount: postCount } )
             break;
         case "thread":
             if(pin) {
-                pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, boardId: post_board, pinned: true } )
+                pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, threadId: no, boardId: post_board, pinned: true } )
             }
             else {
-                pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, boardId: post_board, pinned: false} )
+                console.log(pageStack.depth)
+                pageStack.push(Qt.resolvedUrl("../pages/PostsPage.qml"), {postNo: no, threadId: no, boardId: post_board, pinned: false} )
             }
             break;
 
