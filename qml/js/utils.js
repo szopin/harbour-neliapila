@@ -1,23 +1,23 @@
 function makeurls(content) {
    // console.log(content)
      //   var pattern1 = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
-    var pattern1 = /((((https?|ftp|file):\/\/)|\b)(([-A-Z0-9]+\.)+(xn--[A-Z0-9-]{4,}|[A-Z]{2,})(?:(?=[\/\s\b\<]|$)(?!%))((?=[\/])[-A-Z0-9+&@#\/%\'?=~_|!:,.;一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]]*[-A-Z0-9+&;@\'#\/%=~_一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]|])?))(?![^<>]*>|[^"]*?<\/a)/ig; 
-    
+    var pattern1 = /((((https?|ftp|file):\/\/)|\b)(([-A-Z0-9]+\.)+(xn--[A-Z0-9-]{4,}|[A-Z]{2,})(?:(?=[\/\s\b\<]|$)(?!%))((?=[\/])[-A-Z0-9+&@#\/%\'?=~_|!:,.;一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]]*[-A-Z0-9+&;@\'#\/%=~_一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]|])?))(?![^<>]*>|[^"]*?<\/a)/ig;
+
     // /(((https?|ftp|file):\/\/)?([-A-Z0-9]+\.)+(xn--[A-Z0-9-]{4,}|[A-Z]{2,})(((\/[-A-Z0-9+&@#\/%\'?=~_|!:,.;一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]]*)[-A-Z0-9+&;@\'#\/%=~_一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]|]?)?|\/))(?![^<>]*>|[^"]*?<\/a)/ig;
 
-    
+
     // /(\b((https?|ftp|file):\/\/)?([-A-Z0-9]+\.)+(xn--[A-Z0-9-]{2,}|[A-Z]{2,})((\/[-A-Z0-9+&@#\/%\'?=~_|!:,.;一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]]*)[-A-Z0-9+&;@\'#\/%=~_一-龠ぁ-ゔァ-ヴー々〆〤ヶа-яё\(\)\[\]|])?)(?![^<>]*>|[^"]*?<\/a)/ig;
 
-		content = content.replace(pattern1, function(x) {
-        return "<a href=\"" + x.replace(/\'/g, "%27") + "\">" + x + "</a>" 
-        //encodeURI(x) + "\">" + x + "</a>" 
+        content = content.replace(pattern1, function(x) {
+        return "<a href=\"" + x.replace(/\'/g, "%27") + "\">" + x + "</a>"
+        //encodeURI(x) + "\">" + x + "</a>"
         // x.replace(/\'/g, "%27") + "\">" + x + "</a>"
     });
-    
+
     // "<a href=\"$1\" >$1</a> ");
     //content = content.replace(/<a href=\"(.*)\>/
    // console.log(content)
-		return content
+        return content
 }
 //function makeurls(content) {
     //var pattern1 = /(\b((https?|ftp|file):\/\/)?[-A-Z0-9]*\.[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
@@ -118,9 +118,10 @@ function openLink(link) {
     var httplink = new RegExp(/^http/)
     //Internal link to another thread, also get board
     var intlink = new RegExp(/^\/[a-z]+\/thread\/[0-9]+\#p[0-9]+/)
+    var bintlink = new RegExp(/^\/\/boards\.4chan\.org\/[a-z]+\/thread\/[0-9]+\#p[0-9]+/)
     var restolink = new RegExp(/^#p[0-9]+/)
 
-    if (link.match(pattern1)){
+    if (link.match(pattern1) && !link.match(bintlink)){
         //If external link is matched, add http:// if its not there already because otherwise Sailfish doesnt understand to open URL with browser
         if(!link.match(httplink)){
             link = "http://"+link
@@ -130,8 +131,9 @@ function openLink(link) {
         console.log(link)
         Qt.openUrlExternally(link)
     }
-    else if (link.match(intlink)){
+    else if (link.match(intlink) || link.match(bintlink) ){
 console.log('intlink')
+        link = link.replace(/\/\/boards\.4chan\.org\//gm, '\/');
         var brd = link.match(/([a-z]+)/)[0]
         var trd = link.match(/([0-9]+)/)[0]
         var pid = link.match(/#p([0-9]+)/)[1]

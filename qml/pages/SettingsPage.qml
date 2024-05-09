@@ -179,7 +179,7 @@ Page {
                             Label {
                                 anchors.top: aboutListItemPrimaryLabel.bottom
 
-                                text: "Version 0.9.1"
+                                text: "Version 0.9.2"
                                 font.pixelSize: Theme.fontSizeExtraSmall
                             }
 

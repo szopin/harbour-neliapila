@@ -148,7 +148,7 @@ AbstractPage {
                 }
             }
             MenuItem {
-                text: qsTr("Open thread in webview") + delaystrip + tdepth
+                text: qsTr("Open thread in webview")
                 onClicked: {
                     var url = "https://boards.4chan.org/"+boardId+"/thread/"+postNo
                     onClicked: pageStack.push("WebViewPage.qml", {"pageurl": url });
