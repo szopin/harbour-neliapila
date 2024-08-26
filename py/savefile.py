@@ -14,7 +14,8 @@ def getdirs (dir):
     return dirs
 
 def save (dir, name, url, filenam):
-    with urllib.request.urlopen(url) as res:                    
+    req = urllib.request.Request(url, headers={'User-agent': 'curl/8.4.0-DEV'})
+    with urllib.request.urlopen(req) as res:
         if res.getcode() == 200:
             f = open(os.path.abspath(dir) + "/" + name, 'wb')
             f.write(res.read())
