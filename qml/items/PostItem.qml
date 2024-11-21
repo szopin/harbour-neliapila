@@ -259,6 +259,14 @@ GridItem {
                                                    "filename_original": filename_original
                                                });
                                 break;
+                            case ".mp4":
+                                pageStack.push(Qt.resolvedUrl("../pages/VideoViewPage.qml"),
+                                               {
+                                                   "imgUrl": imgUrl,
+                                                   "filename": filename,
+                                                   "filename_original": filename_original
+                                               });
+                                break;
                             case ".gif":
                                 pageStack.push(Qt.resolvedUrl("../pages/GifViewPage.qml"),
                                                {
