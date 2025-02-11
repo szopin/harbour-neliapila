@@ -35,7 +35,7 @@ Page {
             Label {
                 id: appName
                 anchors.top: appIcon.bottom
-                text: "Neliapila 0.9.4"
+                text: "Neliapila 0.9.5"
                 anchors.horizontalCenter: parent.horizontalCenter
                 font.family: Theme.fontFamily
                 font.pixelSize: Theme.fontSizeLarge

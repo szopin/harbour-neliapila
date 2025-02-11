@@ -118,5 +118,5 @@ def parse_posts(list,post_replies=None):
 def collect_replies(com):
     quotelink = r'<a[^>]* href="#p([^"]*)" class="quotelink">\>.*?\<\/a\>'
     com = html.unescape(com)
-    replies = re.findall(quotelink,com)
+    replies = set(re.findall(quotelink,com))
     return replies
