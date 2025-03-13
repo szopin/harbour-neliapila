@@ -57,5 +57,6 @@ DISTFILES += \
     qml/pages/*.qml \
     qml/items/*.qml \
     qml/cover/CoverPage.qml \
+    qml/pages/WebmViewPage.qml \
     rpm/harbour-neliapila.changes.in \
     rpm/harbour-neliapila.spec

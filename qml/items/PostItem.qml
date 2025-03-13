@@ -252,7 +252,7 @@ GridItem {
                         onClicked: {
                             switch(ext) {
                             case ".webm":
-                                pageStack.push(Qt.resolvedUrl("../pages/VideoViewPage.qml"),
+                                pageStack.push(Qt.resolvedUrl("../pages/WebmViewPage.qml"),
                                                {
                                                    "imgUrl": imgUrl,
                                                    "filename": filename,
