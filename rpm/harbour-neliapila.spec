@@ -9,7 +9,7 @@ Name:       harbour-neliapila
 # << macros
 
 Summary:    Neliapila 4chan.org browser
-Version:    0.9.6
+Version:    0.9.7
 Release:    1
 Group:      Qt/Qt
 License:    GPLv3+

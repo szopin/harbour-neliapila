@@ -57,7 +57,7 @@ Page {
             }
 
             MenuItem {
-                text: qsTr("Save as")
+                text: qsTr("Save mp4")
                 onClicked: pageStack.push(Qt.resolvedUrl("SaveFilePage.qml"), {uri: imgUrl})
             }
 

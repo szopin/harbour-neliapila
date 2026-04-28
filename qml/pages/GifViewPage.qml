@@ -114,7 +114,7 @@ AbstractPage {
             }
 
             MenuItem {
-                text: qsTr("Save as")
+                text: qsTr("Save gif")
                 onClicked: pageStack.push(Qt.resolvedUrl("SaveFilePage.qml"), {uri: imgUrl})
             }
 

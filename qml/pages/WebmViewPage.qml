@@ -14,7 +14,15 @@ AbstractPage {
     property string ext
     property string filename
     property string filename_original
-
+SilicaFlickable{
+        anchors.fill: parent
+        PullDownMenu {
+            id: imageViewMenu
+        MenuItem {
+                text: qsTr("Save webm")
+                onClicked: pageStack.push(Qt.resolvedUrl("SaveFilePage.qml"), {uri: imgUrl})
+        }
+        }
     WebView {
          id: webView
 
@@ -24,6 +32,7 @@ AbstractPage {
              right: parent.right
              bottom: parent.bottom
          }
+
          url: pageurl
 
 
@@ -61,5 +70,6 @@ AbstractPage {
         py.call('savefile.getdirs', [dir], function(response) {
             page.dirs = response
         });
+    }
     }
 }
